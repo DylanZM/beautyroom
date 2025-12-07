@@ -94,9 +94,11 @@ export default function ServiciosPage() {
     filteredServices.sort((a, b) => b.precio - a.precio);
   }
 
-  const categories = [
+  const categories: string[] = [
     "all",
-    ...Array.from(new Set(services.map((s) => s.categoria).filter(Boolean))),
+    ...Array.from(
+      new Set(services.map((s) => s.categoria).filter(Boolean) as string[])
+    ),
   ];
 
   return (
@@ -107,7 +109,8 @@ export default function ServiciosPage() {
             Nuestros Servicios
           </h1>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-          Descubre todos los servicios que tenemos para realzar tu belleza natural
+            Descubre todos los servicios que tenemos para realzar tu belleza
+            natural
           </p>
         </div>
 
@@ -129,7 +132,7 @@ export default function ServiciosPage() {
             </SelectTrigger>
             <SelectContent>
               {categories.map((cat) => (
-                <SelectItem key={cat} value={cat}>
+                <SelectItem key={String(cat)} value={String(cat)}>
                   {cat === "all" ? "Todos" : cat}
                 </SelectItem>
               ))}
@@ -232,7 +235,7 @@ export default function ServiciosPage() {
                     </span>
                   </div>
 
-                   <Link href={`/citas?servicio=${service.id}`}>
+                  <Link href={`/citas?servicio=${service.id}`}>
                     <Button className="w-full mt-4 gap-2 text-white ">
                       <Calendar className="h-4 w-4 " />
                       Agendar Cita

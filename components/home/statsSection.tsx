@@ -1,4 +1,4 @@
-import { Users, Calendar, Award, Heart } from "lucide-react"
+import { Users, Calendar, Award, Heart } from "lucide-react";
 
 const stats = [
   {
@@ -21,7 +21,7 @@ const stats = [
     value: "98%",
     label: "Tasa de Satisfacción",
   },
-]
+];
 
 export function StatsSection() {
   return (
@@ -40,5 +40,5 @@ export function StatsSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

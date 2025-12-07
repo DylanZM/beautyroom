@@ -1,7 +1,7 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Calendar, Sparkles } from "lucide-react"
-import locales from "@/locales/hero.json"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Calendar, Sparkles } from "lucide-react";
+import locales from "@/locales/hero.json";
 
 export function HeroSection() {
   return (
@@ -20,17 +20,22 @@ export function HeroSection() {
             </div>
 
             <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl text-balance animate-fade-in-up animation-delay-100">
-              Transforma tu <span className="text-primary">belleza</span> con nosotros
+              Transforma tu <span className="text-primary">belleza</span> con
+              nosotros
             </h1>
 
             <p className="text-lg text-muted-foreground leading-relaxed max-w-xl animate-fade-in-up animation-delay-200">
-              En BeautyRoom te ofrecemos una experiencia única de cuidado personal. Nuestro equipo de estilistas
-              expertos está listo para realzar tu belleza natural.
+              En BeautyRoom te ofrecemos una experiencia única de cuidado
+              personal. Nuestro equipo de estilistas expertos está listo para
+              realzar tu belleza natural.
             </p>
 
             <div className="flex flex-wrap gap-4 animate-fade-in-up animation-delay-300">
               <Link href="/citas">
-                <Button size="lg" className="gap-2 transition-all duration-300 hover:scale-105 hover:shadow-lg text-white">
+                <Button
+                  size="lg"
+                  className="gap-2 transition-all duration-300 hover:scale-105 hover:shadow-lg text-white bg-[#9E6034]"
+                >
                   <Calendar className="h-5 w-5" />
                   Agendar Cita
                 </Button>
@@ -49,7 +54,7 @@ export function HeroSection() {
 
           <div className="relative hidden lg:block animate-slide-in-right">
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl">
-               <img
+              <img
                 src={locales.main.src.replace(/^\/public/, "")}
                 alt={locales.main.alt}
                 className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
@@ -59,8 +64,8 @@ export function HeroSection() {
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-2">
                   <img
-                     src={locales.gallery[0].src.replace(/^\/public/, "")}
-                      alt={locales.gallery[0].alt}
+                    src={locales.gallery[0].src.replace(/^\/public/, "")}
+                    alt={locales.gallery[0].alt}
                     className="h-10 w-10 rounded-full border-2 border-background object-cover"
                   />
                   <img
@@ -84,5 +89,5 @@ export function HeroSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

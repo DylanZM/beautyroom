@@ -15,7 +15,7 @@ import {
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 transition-all duration-300" >
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 transition-all duration-300">
       <nav
         aria-label="Main navigation"
         className="text-lg text-muted-foreground transition-all duration-200 hover:text-foreground hover:translate-x-1"
@@ -49,7 +49,10 @@ export default function Header() {
               }
 
               return (
-                <li key={item.href} className="relative flex items-center gap-0">
+                <li
+                  key={item.href}
+                  className="relative flex items-center gap-0"
+                >
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button
@@ -68,7 +71,9 @@ export default function Header() {
                       </DropdownMenuItem>
 
                       <DropdownMenuItem asChild>
-                        <Link href="/acerca-de/mision-vision">Misión y visión</Link>
+                        <Link href="/acerca-de/mision-vision">
+                          Misión y visión
+                        </Link>
                       </DropdownMenuItem>
 
                       <DropdownMenuItem asChild>
@@ -82,9 +87,11 @@ export default function Header() {
           </ul>
 
           <div className="flex items-center justify-end gap-4">
-            <Button className="bg-[#8c4f2a] text-white px-4 py-2 rounded-md transition-transform duration-200 hover:scale-105 hover:shadow-lg hover:bg-[#A67C52]">
+            <Link href="/login">
+            <Button className="bg-[#9E6034] text-white px-4 py-2 rounded-md transition-transform duration-200 hover:scale-105 hover:shadow-lg hover:bg-[#A67C52]">
               Iniciar sesión
             </Button>
+            </Link>
           </div>
         </div>
       </nav>
