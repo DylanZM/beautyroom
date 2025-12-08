@@ -6,9 +6,25 @@ import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { toast } from "sonner";
-import { User, Mail, Phone, Shield, Save, ArrowLeft, LogOut, MapPin, Briefcase } from "lucide-react";
+import {
+  User,
+  Mail,
+  Phone,
+  Shield,
+  Save,
+  ArrowLeft,
+  LogOut,
+  MapPin,
+  Briefcase,
+} from "lucide-react";
 import Link from "next/link";
 
 export default function PerfilPage() {
@@ -46,7 +62,9 @@ export default function PerfilPage() {
     }
   }, [user, isLoading, router]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
@@ -56,12 +74,13 @@ export default function PerfilPage() {
     const next: Record<string, string> = {};
     if (!formData.name.trim()) next.name = "El nombre es requerido.";
     if (!formData.email.trim()) next.email = "El correo es requerido.";
-    else if (!/^\S+@\S+\.\S+$/.test(formData.email)) next.email = "Correo inválido.";
-    
+    else if (!/^\S+@\S+\.\S+$/.test(formData.email))
+      next.email = "Correo inválido.";
+
     if (isStylist && !formData.especialidad.trim()) {
       next.especialidad = "La especialidad es requerida.";
     }
-    
+
     return next;
   };
 
@@ -155,7 +174,10 @@ export default function PerfilPage() {
     <div className="min-h-screen bg-secondary/30 py-12">
       <div className="container max-w-2xl mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
-          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+          >
             <ArrowLeft className="h-4 w-4" />
             Volver al Inicio
           </Link>
@@ -184,11 +206,19 @@ export default function PerfilPage() {
               <CardTitle className="text-2xl">{user.name}</CardTitle>
               <CardDescription>{user.email}</CardDescription>
               <div className="flex justify-center gap-2 mt-2">
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(
+                    user.role
+                  )}`}
+                >
                   {getRoleName(user.role)}
                 </span>
                 {isStylist && (
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(user.status)}`}>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                      user.status
+                    )}`}
+                  >
                     {user.status}
                   </span>
                 )}
@@ -200,7 +230,9 @@ export default function PerfilPage() {
           <Card className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
             <CardHeader>
               <CardTitle className="text-lg">Información Personal</CardTitle>
-              <CardDescription>Actualiza tu información personal.</CardDescription>
+              <CardDescription>
+                Actualiza tu información personal.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -219,7 +251,9 @@ export default function PerfilPage() {
                     required
                     disabled={isSaving}
                   />
-                  {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name}</p>}
+                  {errors.name && (
+                    <p className="text-sm text-red-600 mt-1">{errors.name}</p>
+                  )}
                 </div>
 
                 {/* Email */}
@@ -238,7 +272,9 @@ export default function PerfilPage() {
                     required
                     disabled={isSaving}
                   />
-                  {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
+                  {errors.email && (
+                    <p className="text-sm text-red-600 mt-1">{errors.email}</p>
+                  )}
                 </div>
 
                 {/* Teléfono */}
@@ -260,7 +296,10 @@ export default function PerfilPage() {
 
                 {/* Dirección */}
                 <div className="space-y-2">
-                  <Label htmlFor="direccion" className="flex items-center gap-2">
+                  <Label
+                    htmlFor="direccion"
+                    className="flex items-center gap-2"
+                  >
                     <MapPin className="h-4 w-4 text-muted-foreground" />
                     Dirección
                   </Label>
@@ -278,7 +317,10 @@ export default function PerfilPage() {
                 {isStylist && (
                   <>
                     <div className="space-y-2">
-                      <Label htmlFor="especialidad" className="flex items-center gap-2">
+                      <Label
+                        htmlFor="especialidad"
+                        className="flex items-center gap-2"
+                      >
                         <Briefcase className="h-4 w-4 text-muted-foreground" />
                         Especialidad
                       </Label>
@@ -291,11 +333,18 @@ export default function PerfilPage() {
                         required
                         disabled={isSaving}
                       />
-                      {errors.especialidad && <p className="text-sm text-red-600 mt-1">{errors.especialidad}</p>}
+                      {errors.especialidad && (
+                        <p className="text-sm text-red-600 mt-1">
+                          {errors.especialidad}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="status" className="flex items-center gap-2">
+                      <Label
+                        htmlFor="status"
+                        className="flex items-center gap-2"
+                      >
                         <Shield className="h-4 w-4 text-muted-foreground" />
                         Estado
                       </Label>
@@ -310,6 +359,7 @@ export default function PerfilPage() {
                         <option value="disponible">disponible</option>
                         <option value="ocupado">ocupado</option>
                         <option value="descanso">descanso</option>
+                        <option value="inactivo">inactivo</option>
                       </select>
                     </div>
                   </>
@@ -331,7 +381,6 @@ export default function PerfilPage() {
               </form>
             </CardContent>
           </Card>
-
         </div>
       </div>
     </div>
