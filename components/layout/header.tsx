@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import locales from "@/locales/header.json";
 import { Label } from "@/components/ui/label";
 import { Button } from "../ui/button";
-import { Scissors, ChevronDown } from "lucide-react";
+import { Scissors, ChevronDown,LogOut,CircleUserRound } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -144,11 +144,14 @@ export default function Header() {
 
                 <DropdownMenuContent align="end" className="w-44">
                   <DropdownMenuItem asChild>
-                    <Link href="/profile">Mi perfil</Link>
+                    <Link href="/perfil">
+                    <CircleUserRound size={16} />
+                    Mi perfil</Link>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem>
-                    <button onClick={handleLogout} className="w-full text-left">
+                    <button onClick={handleLogout} className="w-full text-left flex items-center gap-2">
+                      <LogOut size={16} />
                       Cerrar sesión
                     </button>
                   </DropdownMenuItem>

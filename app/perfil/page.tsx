@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { User, Mail, Phone, Calendar, Shield, Save, ArrowLeft, LogOut, MapPin, Briefcase } from "lucide-react";
+import { User, Mail, Phone, Shield, Save, ArrowLeft, LogOut, MapPin, Briefcase } from "lucide-react";
 import Link from "next/link";
 
 export default function PerfilPage() {
@@ -307,9 +307,9 @@ export default function PerfilPage() {
                         disabled={isSaving}
                         className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       >
-                        <option value="disponible">Disponible</option>
-                        <option value="ocupado">Ocupado</option>
-                        <option value="descanso">Descanso</option>
+                        <option value="disponible">disponible</option>
+                        <option value="ocupado">ocupado</option>
+                        <option value="descanso">descanso</option>
                       </select>
                     </div>
                   </>
@@ -332,51 +332,6 @@ export default function PerfilPage() {
             </CardContent>
           </Card>
 
-          {/* Información de la cuenta */}
-          <Card className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            <CardHeader>
-              <CardTitle className="text-lg">Información de la Cuenta</CardTitle>
-              <CardDescription>Detalles de tu cuenta que no pueden ser modificados aquí.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between py-3 border-b">
-                <div className="flex items-center gap-3">
-                  <Shield className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="font-medium text-sm">Rol de Usuario</p>
-                    <p className="text-xs text-muted-foreground">Tu nivel de acceso en el sistema</p>
-                  </div>
-                </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
-                  {getRoleName(user.role)}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between py-3 border-b">
-                <div className="flex items-center gap-3">
-                  <Calendar className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="font-medium text-sm">Miembro desde</p>
-                    <p className="text-xs text-muted-foreground">Fecha de registro en BeautyRoom</p>
-                  </div>
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  {user.createdAt ? new Date(user.createdAt).toLocaleDateString("es-MX", { year: "numeric", month: "long", day: "numeric" }) : "—"}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between py-3">
-                <div className="flex items-center gap-3">
-                  <User className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="font-medium text-sm">ID de Usuario</p>
-                    <p className="text-xs text-muted-foreground">Identificador único</p>
-                  </div>
-                </div>
-                <span className="text-sm text-muted-foreground font-mono">#{user.id ?? "—"}</span>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>

@@ -33,7 +33,13 @@ async function fetchWithToken(url: string, token?: string | null, init?: Request
   return fetch(url, { ...init, headers });
 }
 
-
+/**
+ * Normaliza la respuesta de Laravel para flatten los datos anidados
+ * Convierte:
+ * { id, name, email, role, client: { telefono, direccion }, stylist: { especialidad, status, telefono } }
+ * En:
+ * { id, name, email, role, phone/telefono, direccion, especialidad, status }
+ */
 function normalizeUser(data: any): any {
   if (!data) return null;
 
@@ -58,6 +64,7 @@ function normalizeUser(data: any): any {
     normalized.notas = data.notas || "";
   }
 
+  // Si es estilista, extrae datos de la relación stylist
   if (data.role === "stylist" && data.stylist) {
     normalized.especialidad = data.stylist.especialidad || "";
     normalized.status = data.stylist.status || "disponible";
@@ -147,19 +154,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       router.push("/");
     } catch {
+      // ignore
     }
   };
 
   const updateUser = async (data: Partial<any>): Promise<boolean> => {
     if (!auth?.token || !auth?.user?.id) return false;
     try {
+      // Mapea los campos del formulario a lo que espera el backend
       const dataToSend: any = {};
 
       // Campos de User
       if ("name" in data) dataToSend.name = data.name;
       if ("email" in data) dataToSend.email = data.email;
 
-      // Campos de Client o Stylist según el rol
+      // Campos de Client según el rol
       if (user?.role === "client") {
         if ("phone" in data || "telefono" in data) {
           dataToSend.telefono = data.phone || data.telefono;
@@ -172,6 +181,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
+      // Campos de Stylist según el rol
       if (user?.role === "stylist") {
         if ("phone" in data || "telefono" in data) {
           dataToSend.telefono_stylist = data.phone || data.telefono;
@@ -180,9 +190,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           dataToSend.especialidad = data.especialidad;
         }
         if ("status" in data) {
-          dataToSend.status = data.status;
+          dataToSend.status = data.status;  // ← Envía status directamente
         }
       }
+
+      console.log("Sending data to backend:", dataToSend);
 
       const res = await fetchWithToken(`${API_BASE}/api/users/${auth.user.id}`, auth.token, {
         method: "PATCH",
@@ -196,6 +208,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       const payload = await res.json();
+      console.log("Backend response:", payload);
+      
       const userData = payload?.user || payload?.data?.user || payload?.data || payload;
       const normalizedUser = normalizeUser(userData);
       const newAuth = { ...auth, user: normalizedUser };
