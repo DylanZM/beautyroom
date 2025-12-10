@@ -6,13 +6,14 @@ import { useRouter } from "next/navigation";
 import locales from "@/locales/header.json";
 import { Label } from "@/components/ui/label";
 import { Button } from "../ui/button";
-import { Scissors, ChevronDown,LogOut,CircleUserRound } from "lucide-react";
+import { Scissors, ChevronDown, LogOut, CircleUserRound, LayoutDashboard } from "lucide-react";
 
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
 export default function Header() {
@@ -56,6 +57,7 @@ export default function Header() {
   };
 
   const userLabel = user?.name || user?.nombre || user?.email || "Mi cuenta";
+  const isAdmin = user?.role === "admin";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/100 transition-all duration-300" style={{ backdropFilter: "none", WebkitBackdropFilter: "none" }}>
@@ -143,10 +145,23 @@ export default function Header() {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align="end" className="w-44">
+                  {isAdmin && (
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link href="/dashboard" className="flex items-center gap-2">
+                          <LayoutDashboard size={16} />
+                          Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
+                  
                   <DropdownMenuItem asChild>
-                    <Link href="/perfil">
-                    <CircleUserRound size={16} />
-                    Mi perfil</Link>
+                    <Link href="/perfil" className="flex items-center gap-2">
+                      <CircleUserRound size={16} />
+                      Mi perfil
+                    </Link>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem>
