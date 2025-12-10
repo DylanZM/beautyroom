@@ -388,7 +388,7 @@ export default function DashboardPage() {
     }
   }
 
-  const updateAppointmentStatus = async (id: number, newStatus: string) => {
+  const updateAppointmentStatus = async (id: number, newStatus: "pendiente" | "confirmada" | "cancelada" | "completada") => {
     try {
       const token = localStorage.getItem("beautyroom_auth")
         ? JSON.parse(localStorage.getItem("beautyroom_auth") || "{}").token
@@ -509,7 +509,7 @@ export default function DashboardPage() {
                             <select
                               value={appointment.status}
                               onChange={(e) =>
-                                updateAppointmentStatus(appointment.id, e.target.value)
+                                updateAppointmentStatus(appointment.id, e.target.value as "pendiente" | "confirmada" | "cancelada" | "completada")
                               }
                               className="text-xs px-2 py-1 border rounded"
                             >

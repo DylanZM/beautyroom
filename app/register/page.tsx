@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Scissors, Eye, EyeOff } from "lucide-react";
 
-function saveAuthToStorage(payload) {
+function saveAuthToStorage(payload: any) {
   const token =
     payload?.token ||
     payload?.access_token ||
@@ -43,10 +43,10 @@ export default function RegisterPage() {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSuccessMessage(null);
     setErrorMessage(null);
@@ -97,12 +97,8 @@ export default function RegisterPage() {
         setPassword("");
         setConfirmPassword("");
 
-        const nav = router.push("/");
-        if (nav && typeof nav.then === "function") {
-          nav.then(() => window.location.reload());
-        } else {
-          setTimeout(() => window.location.reload(), 200);
-        }
+        router.push("/");
+        setTimeout(() => window.location.reload(), 200);
       } else {
         const err =
           payload?.message || `Error: ${res.status} ${res.statusText}`;

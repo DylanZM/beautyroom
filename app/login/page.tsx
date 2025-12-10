@@ -65,13 +65,8 @@ export default function LoginPage() {
 
         saveAuthToStorage(payload);
 
-        const nav = router.push("/");
-        if (nav && typeof (nav as Promise<any>).then === "function") {
-          (nav as Promise<any>).then(() => window.location.reload());
-        } else {
-
-          setTimeout(() => window.location.reload(), 200);
-        }
+        router.push("/");
+        setTimeout(() => window.location.reload(), 200);
       } else {
         const err = payload?.message || `Error: ${res.status} ${res.statusText}`;
         setErrorMessage(err);
