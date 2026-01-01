@@ -6,6 +6,7 @@ import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
 import {
   Card,
   CardContent,
@@ -69,7 +70,6 @@ export default function PerfilPage() {
 
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // 🔥 FIX: eliminar error del campo sin usar undefined
     setErrors((prev) => {
       const cleaned = { ...prev };
       delete cleaned[name];

@@ -29,7 +29,7 @@ export function CtaSection() {
             className="gap-2 bg-transparent border border-white text-white transition-all duration-200 hover:bg-white hover:text-[#9E6034] hover:scale-105 hover:shadow-lg"
           >
             <Phone className="h-5 w-5" />
-            Llamar: 555 123 4567
+            Llamar: 809 234 567
           </Button>
         </div>
       </div>

@@ -1,4 +1,3 @@
-// /context/auth-context.tsx
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -33,13 +32,7 @@ async function fetchWithToken(url: string, token?: string | null, init?: Request
   return fetch(url, { ...init, headers });
 }
 
-/**
- * Normaliza la respuesta de Laravel para flatten los datos anidados
- * Convierte:
- * { id, name, email, role, client: { telefono, direccion }, stylist: { especialidad, status, telefono } }
- * En:
- * { id, name, email, role, phone/telefono, direccion, especialidad, status }
- */
+
 function normalizeUser(data: any): any {
   if (!data) return null;
 
@@ -64,7 +57,6 @@ function normalizeUser(data: any): any {
     normalized.notas = data.notas || "";
   }
 
-  // Si es estilista, extrae datos de la relación stylist
   if (data.role === "stylist" && data.stylist) {
     normalized.especialidad = data.stylist.especialidad || "";
     normalized.status = data.stylist.status || "disponible";
@@ -161,14 +153,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const updateUser = async (data: Partial<any>): Promise<boolean> => {
     if (!auth?.token || !auth?.user?.id) return false;
     try {
-      // Mapea los campos del formulario a lo que espera el backend
       const dataToSend: any = {};
 
       // Campos de User
       if ("name" in data) dataToSend.name = data.name;
       if ("email" in data) dataToSend.email = data.email;
 
-      // Campos de Client según el rol
       if (user?.role === "client") {
         if ("phone" in data || "telefono" in data) {
           dataToSend.telefono = data.phone || data.telefono;
@@ -190,7 +180,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           dataToSend.especialidad = data.especialidad;
         }
         if ("status" in data) {
-          dataToSend.status = data.status;  // ← Envía status directamente
+          dataToSend.status = data.status;  
         }
       }
 

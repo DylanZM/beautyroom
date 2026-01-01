@@ -1,4 +1,3 @@
-// /lib/auth.ts
 export const AUTH_KEY = "beautyroom_auth";
 
 export type AuthPayload = {
@@ -43,6 +42,5 @@ export function clearAuthFromStorage() {
   try {
     localStorage.removeItem(AUTH_KEY);
   } catch {
-    // ignore
   }
 }

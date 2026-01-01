@@ -66,12 +66,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/estilistas"
-                  className="text-muted-foreground hover:text-foreground transition-all duration-200 hover:translate-x-1 inline-block"
-                >
-                  Nuestros Estilistas
-                </Link>
+                
               </li>
               <li>
                 <Link
@@ -104,7 +99,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-4 w-4 shrink-0 text-primary" />
-                <span>+52 555 123 4567</span>
+                <span>809 234 567</span>
               </li>
               <li className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="h-4 w-4 shrink-0 text-primary" />

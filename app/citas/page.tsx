@@ -2,19 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar } from "@/components/ui/calendar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
 import { useAuth } from "@/context/auth-context"
-import { Clock, CheckCircle, AlertCircle, XCircle, CalendarIcon } from "lucide-react"
-import Link from "next/link"
+import { BookingForm } from "@/components/appointment/booking-form"
+import { AppointmentsList } from "@/components/appointment/appointments-list"
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
-const timeSlots = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
 
 interface Service {
   id: number
@@ -136,7 +130,6 @@ export default function CitasPage() {
         setLoadingAppointments(true)
         try {
           if (user.role === "stylist") {
-            // Para estilistas
             const stylistRes = await fetch(`${API_BASE}/api/stylists`)
             if (stylistRes.ok) {
               const stylistsData = await stylistRes.json()
@@ -151,11 +144,9 @@ export default function CitasPage() {
               }
             }
           } else if (user.role === "client") {
-            // Para clientes
             const appointmentsRes = await fetch(`${API_BASE}/api/appointments`)
             if (appointmentsRes.ok) {
               const appointmentsData = await appointmentsRes.json()
-              // Filtra solo las citas del cliente actual
               const clientAppointments = appointmentsData.filter(
                 (apt: Appointment) => apt.client?.user?.id === user.id
               )
@@ -185,9 +176,6 @@ export default function CitasPage() {
       setFilteredStylists(stylists)
     }
   }, [selectedService, stylists])
-
-  const selectedServiceData = services.find((s) => s.id === parseInt(selectedService))
-  const selectedStylistData = filteredStylists.find((s) => s.id === parseInt(selectedStylist))
 
   const handleBookAppointment = async () => {
     if (!user) {
@@ -263,7 +251,7 @@ export default function CitasPage() {
       setSelectedDate(undefined)
       setSelectedTime("")
       setNotes("")
-      
+
       // Recargar citas
       if (user.role === "client") {
         const appointmentsRes = await fetch(`${API_BASE}/api/appointments`)
@@ -310,39 +298,6 @@ export default function CitasPage() {
     }
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "confirmada":
-        return (
-          <Badge className="bg-green-100 text-green-700">
-            <CheckCircle className="h-3 w-3 mr-1" />
-            Confirmada
-          </Badge>
-        )
-      case "pendiente":
-        return (
-          <Badge className="bg-amber-100 text-amber-700">
-            <AlertCircle className="h-3 w-3 mr-1" />
-            Pendiente
-          </Badge>
-        )
-      case "cancelada":
-        return (
-          <Badge className="bg-red-100 text-red-700">
-            <XCircle className="h-3 w-3 mr-1" />
-            Cancelada
-          </Badge>
-        )
-      case "completada":
-        return (
-          <Badge className="bg-blue-100 text-blue-700">
-            <CheckCircle className="h-3 w-3 mr-1" />
-            Completada
-          </Badge>
-        )
-    }
-  }
-
   return (
     <div className="py-12 bg-muted/30 min-h-screen">
       <div className="container mx-auto px-4">
@@ -365,155 +320,27 @@ export default function CitasPage() {
                 <CardTitle>Agendar Nueva Cita</CardTitle>
                 <CardDescription>Completa los siguientes campos para agendar tu cita</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                {!user && (
-                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                    <p className="text-amber-800 text-sm">
-                      Para agendar una cita debes{" "}
-                      <Link href="/login" className="font-medium underline">
-                        iniciar sesión
-                      </Link>
-                    </p>
-                  </div>
-                )}
-
-                <div className="grid gap-6 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label>Servicio</Label>
-                    <Select value={selectedService} onValueChange={setSelectedService}>
-                      <SelectTrigger disabled={loadingServices || !user}>
-                        <SelectValue placeholder={loadingServices ? "Cargando..." : "Selecciona un servicio"} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {services.map((service) => (
-                          <SelectItem key={service.id} value={service.id.toString()}>
-                            <div className="flex justify-between items-center gap-4">
-                              <span>{service.nombre}</span>
-                              <span className="text-muted-foreground ml-4">${service.precio}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {selectedService && selectedServiceData && (
-                      <p className="text-sm text-muted-foreground flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        Duración: {selectedServiceData.duracion_minutos} min
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Estilista</Label>
-                    <Select value={selectedStylist} onValueChange={setSelectedStylist} disabled={!selectedService || loadingStylists}>
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder={
-                            loadingStylists
-                              ? "Cargando..."
-                              : !selectedService
-                              ? "Selecciona un servicio primero"
-                              : filteredStylists.length === 0
-                              ? "No hay estilistas para este servicio"
-                              : "Selecciona un estilista"
-                          }
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {filteredStylists.map((stylist) => (
-                          <SelectItem key={stylist.id} value={stylist.id.toString()}>
-                            {stylist.user.name} - {stylist.especialidad}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {selectedStylist && selectedStylistData && (
-                      <p className="text-sm text-muted-foreground">
-                        Estado: <span className="font-medium capitalize">{selectedStylistData.status}</span>
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Fecha</Label>
-                  <div className="flex justify-center">
-                    <Calendar
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={setSelectedDate}
-                      disabled={(date) => date < new Date() || date.getDay() === 0}
-                      className="rounded-md border"
-                    />
-                  </div>
-                </div>
-
-                {selectedDate && (
-                  <div className="space-y-2">
-                    <Label>Hora</Label>
-                    <div className="grid grid-cols-5 gap-2">
-                      {timeSlots.map((time) => (
-                        <Button
-                          key={time}
-                          variant={selectedTime === time ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setSelectedTime(time)}
-                        >
-                          {time}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <Label htmlFor="notes">Notas adicionales (opcional)</Label>
-                  <textarea
-                    id="notes"
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Ej: Tengo alergia a ciertos productos..."
-                    className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                    rows={3}
-                    disabled={isBooking}
-                  />
-                </div>
-
-                {selectedService && selectedStylist && selectedDate && selectedTime && selectedServiceData && selectedStylistData && (
-                  <div className="p-4 bg-muted rounded-lg space-y-2">
-                    <h4 className="font-medium">Resumen de tu cita:</h4>
-                    <p>
-                      <strong>Servicio:</strong> {selectedServiceData.nombre}
-                    </p>
-                    <p>
-                      <strong>Estilista:</strong> {selectedStylistData.user.name}
-                    </p>
-                    <p>
-                      <strong>Fecha:</strong>{" "}
-                      {selectedDate.toLocaleDateString("es-MX", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </p>
-                    <p>
-                      <strong>Hora:</strong> {selectedTime}
-                    </p>
-                    <p className="text-lg font-bold text-primary">
-                      Total: ${selectedServiceData.precio.toLocaleString("es-MX")}
-                    </p>
-                  </div>
-                )}
-
-                <Button
-                  className="w-full text-white"
-                  size="lg"
-                  onClick={handleBookAppointment}
-                  disabled={!user || isBooking || !selectedService || !selectedStylist || !selectedDate || !selectedTime}
-                >
-                  {isBooking ? "Agendando..." : "Confirmar Cita"}
-                </Button>
+              <CardContent>
+                <BookingForm
+                  user={user}
+                  services={services}
+                  filteredStylists={filteredStylists}
+                  selectedService={selectedService}
+                  selectedStylist={selectedStylist}
+                  selectedDate={selectedDate}
+                  selectedTime={selectedTime}
+                  notes={notes}
+                  isLoading={isLoading}
+                  isBooking={isBooking}
+                  loadingServices={loadingServices}
+                  loadingStylists={loadingStylists}
+                  onServiceChange={setSelectedService}
+                  onStylistChange={setSelectedStylist}
+                  onDateChange={setSelectedDate}
+                  onTimeChange={setSelectedTime}
+                  onNotesChange={setNotes}
+                  onSubmit={handleBookAppointment}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -528,60 +355,13 @@ export default function CitasPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {loadingAppointments ? (
-                    <div className="flex items-center justify-center py-8">
-                      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-                    </div>
-                  ) : appointments.length === 0 ? (
-                    <div className="text-center py-8">
-                      <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                      <p className="text-muted-foreground">No tienes citas programadas</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {appointments.map((appointment) => (
-                        <div key={appointment.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-muted/50 rounded-lg gap-4">
-                          <div className="flex-1">
-                            <h4 className="font-medium">{appointment.service?.nombre}</h4>
-                            <p className="text-sm text-muted-foreground">
-                              {user.role === "stylist" ? "Cliente" : "Estilista"}: {user.role === "stylist" ? appointment.client?.user?.name : appointment.stylist?.user?.name}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              {appointment.fecha} a las {appointment.hora}
-                            </p>
-                            {appointment.notas && (
-                              <p className="text-xs text-muted-foreground mt-1">
-                                Notas: {appointment.notas}
-                              </p>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {getStatusBadge(appointment.status)}
-                            {user.role === "stylist" && appointment.status === "pendiente" && (
-                              <div className="flex gap-1">
-                                <Button
-                                  size="sm"
-                                  onClick={() => handleUpdateAppointmentStatus(appointment.id, "confirmada")}
-                                  disabled={updatingAppointment === appointment.id}
-                                  className="bg-green-600 hover:bg-green-700"
-                                >
-                                  <CheckCircle className="h-3 w-3" />
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="destructive"
-                                  onClick={() => handleUpdateAppointmentStatus(appointment.id, "cancelada")}
-                                  disabled={updatingAppointment === appointment.id}
-                                >
-                                  <XCircle className="h-3 w-3" />
-                                </Button>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <AppointmentsList
+                    appointments={appointments}
+                    loading={loadingAppointments}
+                    userRole={user.role}
+                    updatingAppointment={updatingAppointment}
+                    onStatusUpdate={handleUpdateAppointmentStatus}
+                  />
                 </CardContent>
               </Card>
             </TabsContent>

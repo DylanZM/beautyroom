@@ -28,7 +28,6 @@ export default function Header() {
         setUser(parsed?.user ?? parsed);
       }
     } catch (e) {
-      // ignore parse errors
     }
 
     const onStorage = (e: StorageEvent) => {
@@ -60,7 +59,8 @@ export default function Header() {
   const isAdmin = user?.role === "admin";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/100 transition-all duration-300" style={{ backdropFilter: "none", WebkitBackdropFilter: "none" }}>
+    <header className="border-b border-transparent bg-white/5 backdrop-blur-md border-b border-white/5 shadow-sm fixed top-0 w-full h-20 flex items-center justify-center z-50 transition-all duration-300">
+  {/* old style<header className="sticky top-0 z-50 w-full border-b border-border bg-background/100 transition-all duration-300" style={{ backdropFilter: "none", WebkitBackdropFilter: "none" }}> */}
       <nav
         aria-label="Main navigation"
         className="text-lg text-muted-foreground transition-all duration-200 hover:text-foreground hover:translate-x-1"
